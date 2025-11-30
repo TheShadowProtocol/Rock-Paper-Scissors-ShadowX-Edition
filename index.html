@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rock Paper Scissors – ShadowX Edition</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 🌟 LOGO -->
+  <header class="header">
+    <img src="assets/logo 1.jpg" alt="ShadowX Logo" class="logo" />
+    <h1 class="game-title">Rock Paper Scissors: ShadowX Edition</h1>
+  </header>
+
+  <!-- 🌌 Game Setup Panel -->
+  <div class="setup-panel">
+    <label for="player-name">🧠 Enter Your Name, Challenger:</label>
+    <input type="text" id="player-name" placeholder="e.g. ShadowX" maxlength="16" />
+    <label for="mode-select">🎮 Mode:</label>
+    <select id="mode-select">
+      <option value="3">Best of 3</option>
+      <option value="5" selected>Best of 5</option>
+      <option value="7">Best of 7</option>
+    </select>
+    <button id="start-btn">🚀 Start Game</button>
+  </div>
+
+  <!-- 🌒 Theme Toggle -->
+  <div class="theme-toggle">
+    <label>
+      <input type="checkbox" id="theme-switch" />
+      🌙/☀️
+    </label>
+  </div>
+
+  <!-- 🎮 Game Section -->
+  <div class="game-container" style="display:none;" role="region" aria-label="Game Area">
+    <h2>Rock ✊ Paper ✋ Scissors ✌ Lizard 🦎 Spock 🖖</h2>
+    <div class="player-info">Player: <span id="display-player-name"></span></div>
+    <div class="round">Round: <span id="round">1</span> / <span id="max-round">5</span></div>
+    <div class="timer">⏳ Time left: <span id="timer">10</span>s</div>
+    <div class="choices">
+      <button class="choice" data-choice="rock" aria-label="Rock (press 1)" data-key="1">✊</button>
+      <button class="choice" data-choice="paper" aria-label="Paper (press 2)" data-key="2">✋</button>
+      <button class="choice" data-choice="scissors" aria-label="Scissors (press 3)" data-key="3">✌</button>
+      <button class="choice" data-choice="lizard" aria-label="Lizard (press 4)" data-key="4">🦎</button>
+      <button class="choice" data-choice="spock" aria-label="Spock (press 5)" data-key="5">🖖</button>
+    </div>
+    <div class="battle-stage">
+      <div class="player-hand" id="player-hand">✊</div>
+      <div class="versus-text" id="versus">VS</div>
+      <div class="cpu-hand" id="cpu-hand">✊</div>
+    </div>
+    <div class="results animated" role="status" aria-live="polite">
+      <p>You chose: <span id="user-choice">❓</span></p>
+      <p>Computer chose: <span id="computer-choice">❓</span></p>
+      <p id="result" aria-live="polite">Result: 🤔</p>
+    </div>
+    <div class="scoreboard">
+      <p>Your Score: <span id="user-score">0</span></p>
+      <p>Computer Score: <span id="computer-score">0</span></p>
+    </div>
+    <div class="controls">
+      <button id="pause-btn" aria-pressed="false">⏸️ Pause</button>
+      <button id="reset-btn">🔄 Reset Game</button>
+      <button id="mute-btn">🔇 Mute</button>
+    </div>
+    <div class="timer-bar" aria-hidden="true">
+      <div id="timer-progress" class="timer-progress"></div>
+    </div>
+  </div>
+
+  <!-- 🎉 Confetti -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- 🔊 Sound FX -->
+  <audio id="click-sound" src="sounds/voices/click.mp3" preload="auto" aria-hidden="true"></audio>
+  <audio id="win-sound" src="sounds/voices/win.mp3" preload="auto" aria-hidden="true"></audio>
+  <audio id="lose-sound" src="sounds/voices/lose.mp3" preload="auto" aria-hidden="true"></audio>
+  <audio id="tie-sound" src="sounds/voices/tie.mp3" preload="auto" aria-hidden="true"></audio>
+  <audio id="bg-music" src="sounds/voices/bg.mp3" preload="auto" loop aria-hidden="true"></audio>
+  <audio id="voice-result" src="" preload="auto" aria-hidden="true"></audio>
+  <audio id="voice-flawless" src="sounds/voices/flawless.mp3" preload="auto" aria-hidden="true"></audio>
+
+  <!-- 🏆 Summary Modal -->
+  <div id="summary-modal">
+    <div class="modal-content">
+      <h2 id="summary-title">Game Over</h2>
+      <p id="summary-details"></p>
+      <div class="modal-actions">
+        <button id="close-summary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <section id="leaderboard" aria-labelledby="leaderboard-title">
+    <h3 id="leaderboard-title">Leaderboard</h3>
+    <ol id="leaderboard-list">
+      <li>No scores yet</li>
+    </ol>
+  </section>
+
+  <!-- Keyboard Remap Panel -->
+  <section id="remap-panel" aria-labelledby="remap-title">
+    <h3 id="remap-title">Keyboard Controls</h3>
+    <p>Press a remap button, then press the new key to assign.</p>
+    <div id="remap-list" class="remap-list">
+      <div class="remap-item" data-choice="rock">Rock: <span class="remap-key" data-choice="rock">1</span> <button class="remap-btn" data-choice="rock">Remap</button></div>
+      <div class="remap-item" data-choice="paper">Paper: <span class="remap-key" data-choice="paper">2</span> <button class="remap-btn" data-choice="paper">Remap</button></div>
+      <div class="remap-item" data-choice="scissors">Scissors: <span class="remap-key" data-choice="scissors">3</span> <button class="remap-btn" data-choice="scissors">Remap</button></div>
+      <div class="remap-item" data-choice="lizard">Lizard: <span class="remap-key" data-choice="lizard">4</span> <button class="remap-btn" data-choice="lizard">Remap</button></div>
+      <div class="remap-item" data-choice="spock">Spock: <span class="remap-key" data-choice="spock">5</span> <button class="remap-btn" data-choice="spock">Remap</button></div>
+    </div>
+  </section>
+
+  <!-- Loader Overlay -->
+  <div id="loader-overlay" class="loader-overlay" aria-hidden="false">
+    <div class="loader">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="loader-text">Loading audio & assets…</div>
+    </div>
+    <div class="loader-fallback" style="display:none;">Audio blocked — click anywhere to enable sounds.</div>
+  </div>
+
+  <!-- 👾 Footer Credit -->
+  <footer class="footer">
+    <p>👾 Created by <strong>TheRealShadowX</strong> | Powered by HTML, CSS & JS</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

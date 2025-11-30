@@ -104,10 +104,12 @@ You can include preview and screenshot images that will be displayed in the proj
 
 If you add these files, they will appear here in the README automatically. Example markdown (already used by the project if files are present):
 
-![Preview1 image](assets/Preview1.png)
+[Preview1 image]
+<img width="1916" height="970" alt="Preview1" src="https://github.com/user-attachments/assets/63183831-b947-4bf2-9339-ace6b161ec85" />
 
-![screenshot1 image](assets/screenshot1.png)
+<img width="1917" height="965" alt="screenshot1" src="https://github.com/user-attachments/assets/f3e51bc9-946e-450e-8bfd-5deaff88aee9" />
 
-![screenshot2 image](assets/screenshot2.png)
+<img width="1893" height="968" alt="screenshot2" src="https://github.com/user-attachments/assets/b76dc465-1564-40a7-9485-cdbdbd61f028" />
+
 
 
